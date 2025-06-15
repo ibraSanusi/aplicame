@@ -1,47 +1,43 @@
 // lib/bot.ts
-// import { normalizar } from "./helpers";
-import { MessageType, QueryBotResponse, Role } from "./models";
-
-// export function queryBot(userMessage: string): {
-//   response: string;
-//   shouldSave: boolean;
-// } {
-//   const msgNorm = normalizar(userMessage);
-
-//   if (msgNorm.includes("linkedin")) {
-//     return {
-//       response:
-//         "Este es el mensaje para LinkedIn... ¿Quieres guardar la solicitud?",
-//       shouldSave: true,
-//     };
-//   }
-
-//   return {
-//     response: "Perfecto. ¿Has enviado la solicitud?",
-//     shouldSave: true,
-//   };
-// }
+import { ApiChatResponse, MessageType, QueryBotResponse, Role } from "./models";
 
 /**
  * Envía los mensajes del usuario al endpoint /api/chat para obtener una respuesta del modelo de lenguaje (ChatGPT).
  *
  * @param userMessages - Array de mensajes del usuario y del bot en formato MessageType[].
- * @returns Un objeto con la respuesta generada por el bot y un indicador `shouldSave` que señala si se debe guardar la solicitud.
+ * @returns Un objeto con la respuesta generada por el bot y un indicador `saved` que señala si se debe guardar la solicitud, o null si ocurre un error.
  */
 export async function queryBot(
   userMessages: MessageType[]
-): Promise<QueryBotResponse> {
-  const res = await fetch("/api/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ messages: userMessages }), // <-- corregido aquí
-  });
+): Promise<QueryBotResponse | null> {
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: userMessages }),
+    });
 
-  const data = await res.json();
-  return {
-    response: data.response,
-    shouldSave: true,
-  };
+    if (!res.ok) {
+      console.error(`Error HTTP: ${res.status} - ${res.statusText}`);
+      return null;
+    }
+
+    const data: ApiChatResponse = await res.json();
+
+    // Validar que la respuesta tiene lo esperado
+    if (typeof data.response !== "string" || typeof data.save !== "boolean") {
+      console.error("Respuesta del bot con formato inesperado", data);
+      return null;
+    }
+
+    return {
+      response: data.response,
+      saved: data.save,
+    };
+  } catch (error) {
+    console.error("Error al consultar al bot:", error);
+    return null;
+  }
 }
 
 export function addMessages(

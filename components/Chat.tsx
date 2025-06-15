@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Message from "./Message";
 import MessageInput from "./MessageInput";
-// import { toast } from "sonner";
-import { MessageType, Role } from "@/lib";
+import { toast } from "sonner";
+import { ApplicationData, MessageType, Role } from "@/lib";
 import { addMessages, queryBot } from "@/lib/bot";
 
 export default function Chat() {
@@ -14,18 +14,41 @@ export default function Chat() {
       text: "¡Hola! ¿A qué empresa quieres postularte y por qué canal?",
     },
   ]);
-  const [canSave, setCanSave] = useState<boolean>(false);
-
-  console.log(canSave);
 
   const handleSend = async (text: string) => {
-    // setMessages([...messages, { role: Role.User, text }]);
-
     const newMessage = [...messages, { role: Role.User, text }];
-    const { response, shouldSave } = await queryBot(newMessage);
-    setCanSave(shouldSave);
+    const queryResponse = await queryBot(newMessage);
 
-    const newMessages = addMessages(messages, text, response);
+    if (!queryResponse) return;
+
+    const { response, saved } = queryResponse;
+
+    // Destructurar el objeto a guardar si es posible
+    if (saved) {
+      const objToSave: ApplicationData = JSON.parse(response);
+      console.log("Se guardara esta solicitud: ", objToSave);
+
+      toast(objToSave.company, {
+        description: new Date().toLocaleString("es-ES", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        action: {
+          label: "Deshacer",
+          onClick: () => console.log("Deshacer"),
+        },
+      });
+    }
+
+    const newMessages = addMessages(
+      messages,
+      text,
+      saved ? "Se guardo..." : response
+    );
     setMessages(newMessages);
   };
 

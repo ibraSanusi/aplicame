@@ -1,4 +1,4 @@
-import { MessageType } from "@/lib";
+import { ApplicationData, MessageType } from "@/lib";
 import { NextResponse } from "next/server";
 import { OpenAI } from "openai";
 
@@ -39,14 +39,15 @@ export async function POST(req: Request) {
         1. Pregunta a qué empresa quiere postularse y por qué canal (LinkedIn, correo, etc).
         2. Ofrece un mensaje de presentación personalizado para enviar por ese canal.
         3. Pregunta si quiere guardar esta solicitud.
-        4. Si responde afirmativamente, devuelve un JSON con el formato:
+        4. Si responde afirmativamente, devuelve un JSON con el formato. Pero solo el formato. No añadas mensaje de más, por ejemplo esto que sueles poner 'Perfecto. Aquí tienes la estructura en formato JSON para guardar esta solicitud:' y sin la etiqueta de markdown que pones:
+        Recuerda no poner el mensaje de extra. Solo queiro el formato json para luego poder parsear la respuesta. Muy importante.
         {
-          empresa: '',
-          canal: '',
-          correo?: '',
-          mensaje: '',
-          fecha: '',
-          estado: ''
+          company: '',
+          channel: '',
+          mail?: '' --> el de la empresa,
+          message: '',
+          date: '',
+          save: '' --> true si el usuario lo quiere guardar / false si no lo quiere hacer
         }
       `.trim(),
     },
@@ -63,5 +64,28 @@ export async function POST(req: Request) {
 
   const response = chatCompletion.choices[0].message.content;
 
-  return NextResponse.json({ response });
+  const objResponse = tryParseResponse(response);
+
+  if (objResponse) {
+    const currentDate = new Intl.DateTimeFormat("es-ES").format(new Date());
+    // Ejemplo: "14/6/2025"
+
+    const newData = { ...objResponse, date: currentDate };
+
+    return NextResponse.json({
+      response: JSON.stringify(newData),
+      save: true,
+    });
+  } else {
+    return NextResponse.json({ response, save: false });
+  }
+}
+
+export function tryParseResponse(response: string | null) {
+  try {
+    const json: ApplicationData = JSON.parse(response ?? "");
+    return json;
+  } catch {
+    return null;
+  }
 }
