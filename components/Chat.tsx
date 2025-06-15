@@ -25,24 +25,38 @@ export default function Chat() {
 
     // Destructurar el objeto a guardar si es posible
     if (saved) {
-      // TODO: almacenar la solicitud en la base de datos
       const objToSave: ApplicationData = JSON.parse(response);
       console.log("Se guardara esta solicitud: ", objToSave);
 
-      toast(objToSave.company, {
-        description: new Date().toLocaleString("es-ES", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        action: {
-          label: "Deshacer",
-          onClick: () => console.log("Deshacer"),
-        },
-      });
+      try {
+        const res = await fetch("/api/application", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(objToSave),
+        });
+
+        if (!res.ok) throw new Error("Error al guardar la solicitud");
+
+        toast(objToSave.company, {
+          description: new Date().toLocaleString("es-ES", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          action: {
+            label: "Deshacer",
+            onClick: () => console.log("Deshacer"),
+          },
+        });
+      } catch (error) {
+        console.error(error);
+        toast("Error al guardar la solicitud", {
+          description: "Revisa la consola",
+        });
+      }
     }
 
     const newMessages = addMessages(
