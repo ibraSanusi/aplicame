@@ -25,6 +25,7 @@ export default function Chat() {
 
     // Destructurar el objeto a guardar si es posible
     if (saved) {
+      // TODO: almacenar la solicitud en la base de datos
       const objToSave: ApplicationData = JSON.parse(response);
       console.log("Se guardara esta solicitud: ", objToSave);
 
