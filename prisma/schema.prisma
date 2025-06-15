@@ -16,4 +16,5 @@ model Application {
     url     String?
     message String
     date    String
+    state   Boolean
 }

@@ -13,6 +13,7 @@ export async function POST(req: Request) {
         url: body.url,
         message: body.message,
         date: body.date,
+        state: body.save,
       },
     });
     return NextResponse.json(application);
