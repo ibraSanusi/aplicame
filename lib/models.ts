@@ -13,6 +13,7 @@ export type QueryBotResponse = { response: string; saved: boolean };
 export type ApplicationData = {
   company: string;
   channel: string;
+  url?: string;
   email?: string; // Optional: only present if sent via email
   message: string;
   date: string;

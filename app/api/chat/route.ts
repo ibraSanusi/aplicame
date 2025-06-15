@@ -41,9 +41,11 @@ export async function POST(req: Request) {
         3. Pregunta si quiere guardar esta solicitud.
         4. Si responde afirmativamente, devuelve un JSON con el formato. Pero solo el formato. No añadas mensaje de más, por ejemplo esto que sueles poner 'Perfecto. Aquí tienes la estructura en formato JSON para guardar esta solicitud:' y sin la etiqueta de markdown que pones:
         Recuerda no poner el mensaje de extra. Solo queiro el formato json para luego poder parsear la respuesta. Muy importante.
+        También asegurate de devolver la url de la pagina web de la empresa de la solicitud.
         {
           company: '',
           channel: '',
+          url?: '',
           email?: '' --> el de la empresa,
           message: '',
           date: '',
