@@ -44,7 +44,7 @@ export async function POST(req: Request) {
         {
           company: '',
           channel: '',
-          mail?: '' --> el de la empresa,
+          email?: '' --> el de la empresa,
           message: '',
           date: '',
           save: '' --> true si el usuario lo quiere guardar / false si no lo quiere hacer
