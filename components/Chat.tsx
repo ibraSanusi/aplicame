@@ -1,80 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import Message from "./Message";
 import MessageInput from "./MessageInput";
-import { toast } from "sonner";
-import { ApplicationData, MessageType, Role } from "@/lib";
-import { addMessages, queryBot } from "@/lib/bot";
+
+import { ChatHeader } from "./ChatHeader";
+import { Messages } from "./Messages";
+import { useChat } from "@/hooks/useChat";
+import { Role } from "@/lib";
 
 export default function Chat() {
-  const [messages, setMessages] = useState<MessageType[]>([
+  const { messages, handleSend } = useChat([
     {
       role: Role.Bot,
       text: "¡Hola! ¿A qué empresa quieres postularte y por qué canal?",
     },
   ]);
 
-  const handleSend = async (text: string) => {
-    const newMessage = [...messages, { role: Role.User, text }];
-    const queryResponse = await queryBot(newMessage);
-
-    if (!queryResponse) return;
-
-    const { response, saved } = queryResponse;
-
-    // Destructurar el objeto a guardar si es posible
-    if (saved) {
-      const objToSave: ApplicationData = JSON.parse(response);
-      console.log("Se guardara esta solicitud: ", objToSave);
-
-      try {
-        const res = await fetch("/api/application", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(objToSave),
-        });
-
-        if (!res.ok) throw new Error("Error al guardar la solicitud");
-
-        toast(objToSave.company, {
-          description: new Date().toLocaleString("es-ES", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          action: {
-            label: "Deshacer",
-            onClick: () => console.log("Deshacer"),
-          },
-        });
-      } catch (error) {
-        console.error(error);
-        toast("Error al guardar la solicitud", {
-          description: "Revisa la consola",
-        });
-      }
-    }
-
-    const newMessages = addMessages(
-      messages,
-      text,
-      saved ? "Se guardo..." : response
-    );
-    setMessages(newMessages);
-  };
-
   return (
-    <div className="flex flex-col h-full p-4 max-w-xl mx-auto">
-      <div className="flex-1 overflow-y-auto space-y-2">
-        {messages.map((msg, idx) => (
-          <Message key={idx} role={msg.role} text={msg.text} />
-        ))}
-      </div>
+    <aside className="chat-scrollbar relative col-span-1 mx-auto flex h-dvh w-full max-w-xl flex-col overflow-y-scroll border-r border-gray-200 bg-[#E8F1F2] px-6">
+      <ChatHeader />
+      <Messages messages={messages} />
       <MessageInput onSend={handleSend} />
-    </div>
+    </aside>
   );
 }

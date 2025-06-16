@@ -119,3 +119,18 @@
   }
 }
 
+.chat-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.chat-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: #d4d4d8;
+  border-radius: 10px;
+}
+
+textarea::-webkit-resizer {
+  background-color: transparent;
+  border-width: 0;
+  outline: none;
+}
+
