@@ -1,6 +1,10 @@
+"use client";
+
 import Chat from "@/components/Chat";
+import { useApplicationStore } from "@/store/store";
 
 export default function HomePage() {
+  const { applications } = useApplicationStore();
   return (
     <main className="grid min-h-dvh grid-cols-4 bg-gray-100">
       {/* Columna 1: Chat (1/4) */}
@@ -11,7 +15,14 @@ export default function HomePage() {
         <h2 className="mb-4 text-2xl font-bold">Dashboard</h2>
         {/* Aquí puedes poner el contenido del dashboard */}
         <div className="rounded-md border border-dashed border-gray-400 p-8 text-center text-gray-500">
-          Aquí irá tu panel de seguimiento de solicitudes 🚀
+          {/* Aquí irá tu panel de seguimiento de solicitudes 🚀 */}
+          <ul>
+            {applications.map((app, index) => (
+              <li key={index}>
+                {app.company} — {app.channel}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
     </main>

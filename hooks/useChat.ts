@@ -4,6 +4,7 @@ import { ApplicationData, MessageType, Role } from "@/lib";
 import { addMessages, queryBot } from "@/lib/bot";
 import { useState } from "react";
 import { showSuccessToast } from "@/lib/toast";
+import { useApplicationStore } from "@/store/store";
 
 export function useChat(initialMessages: MessageType[] = []) {
   const [messages, setMessages] = useState<MessageType[]>(initialMessages);
@@ -25,6 +26,9 @@ export function useChat(initialMessages: MessageType[] = []) {
           body: JSON.stringify(objToSave),
         });
         if (!res.ok) throw new Error("Error al guardar");
+
+        // ✅ GUARDAR EN ZUSTAND
+        useApplicationStore.getState().addApplication(objToSave);
         showSuccessToast(objToSave.company);
       } catch (err) {
         toast("Error al guardar la solicitud", {

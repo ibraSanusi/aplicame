@@ -11,7 +11,7 @@ datasource db {
 model Application {
     id      Int     @id @default(autoincrement())
     company String
-    channel String
+    channel String // TODO: Cambiar esto a platform
     email   String?
     url     String?
     message String
