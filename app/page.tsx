@@ -1,29 +1,48 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import Chat from "@/components/Chat";
+import { ApplicationsTable } from "@/components/ApplicationsTable";
+import { ApplicationData } from "@/lib";
 import { useApplicationStore } from "@/store/store";
 
 export default function HomePage() {
-  const { applications } = useApplicationStore();
+  const { applications, addApplication } = useApplicationStore();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchApplications() {
+      try {
+        const res = await fetch("/api/application");
+        if (!res.ok) throw new Error("Error al cargar las solicitudes");
+        const data: ApplicationData[] = await res.json();
+
+        data.forEach(addApplication); // Guardamos todo en el store
+      } catch (err: any) {
+        setError(err.message || "Error desconocido");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchApplications();
+  }, [addApplication]);
+
   return (
     <main className="grid min-h-dvh grid-cols-4 bg-gray-100">
-      {/* Columna 1: Chat (1/4) */}
+      {/* Columna 1: Chat */}
       <Chat />
 
-      {/* Columnas 2-4: Dashboard (3/4) */}
+      {/* Columna 2-4: Dashboard */}
       <section className="col-span-3 p-6">
         <h2 className="mb-4 text-2xl font-bold">Dashboard</h2>
-        {/* Aquí puedes poner el contenido del dashboard */}
-        <div className="rounded-md border border-dashed border-gray-400 p-8 text-center text-gray-500">
-          {/* Aquí irá tu panel de seguimiento de solicitudes 🚀 */}
-          <ul>
-            {applications.map((app, index) => (
-              <li key={index}>
-                {app.company} — {app.channel}
-              </li>
-            ))}
-          </ul>
-        </div>
+
+        {loading && <p>Cargando solicitudes...</p>}
+        {error && <p className="text-red-600">Error: {error}</p>}
+
+        {!loading && !error && (
+          <ApplicationsTable applications={applications} />
+        )}
       </section>
     </main>
   );
