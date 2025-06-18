@@ -24,7 +24,7 @@ Una aplicación web que te ayuda a generar y registrar solicitudes de empleo med
 - [Tailwind CSS](https://tailwindcss.com/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [OpenAI API (gpt-4o-mini)](https://platform.openai.com/docs)
-- [PostgreSQL](https://www.postgresql.org/) (opcional, si almacenas datos)
+- [SQLite con Turso](https://turso.tech/)
 
 ---
 
