@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import { ApplicationData } from "@/lib";
+import { type Application } from "@prisma/client";
 
 type ApplicationStore = {
-  applications: ApplicationData[];
-  addApplication: (app: ApplicationData) => void;
+  applications: Application[];
+  addApplication: (app: Application) => void;
   clearApplications: () => void;
 };
 

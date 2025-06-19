@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import Chat from "@/components/Chat";
 import { ApplicationsTable } from "@/components/ApplicationsTable";
-import { ApplicationData } from "@/lib";
 import { useApplicationStore } from "@/store/store";
+import { type Application } from "@prisma/client";
 
 export default function HomePage() {
   const { applications, addApplication } = useApplicationStore();
@@ -16,11 +16,15 @@ export default function HomePage() {
       try {
         const res = await fetch("/api/application");
         if (!res.ok) throw new Error("Error al cargar las solicitudes");
-        const data: ApplicationData[] = await res.json();
+        const data: Application[] = await res.json();
 
         data.forEach(addApplication); // Guardamos todo en el store
-      } catch (err: any) {
-        setError(err.message || "Error desconocido");
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Error desconocido");
+        }
       } finally {
         setLoading(false);
       }

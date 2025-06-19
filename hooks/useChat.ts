@@ -1,6 +1,7 @@
 // hooks/useChat.ts
 import { toast } from "sonner";
-import { ApplicationData, MessageType, Role } from "@/lib";
+import { ApplicationState, MessageType, Role } from "@/lib";
+import { type Application } from "@prisma/client";
 import { addMessages, queryBot } from "@/lib/bot";
 import { useState } from "react";
 import { showSuccessToast } from "@/lib/toast";
@@ -15,10 +16,12 @@ export function useChat(initialMessages: MessageType[] = []) {
 
     if (!queryResponse) return;
 
-    const { response, saved } = queryResponse;
+    const { response, state } = queryResponse;
 
-    if (saved) {
-      const objToSave: ApplicationData = JSON.parse(response);
+    if (state === ApplicationState.ENVIADO) {
+      const objToSave: Application = JSON.parse(response);
+
+      console.log("objToSave: ", objToSave);
       try {
         const res = await fetch("/api/application", {
           method: "POST",
@@ -41,7 +44,7 @@ export function useChat(initialMessages: MessageType[] = []) {
     const newMessages = addMessages(
       messages,
       text,
-      saved ? "Se guardó..." : response,
+      state === ApplicationState.ENVIADO ? "Se guardó..." : response,
     );
     setMessages(newMessages);
   };

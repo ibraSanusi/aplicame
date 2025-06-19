@@ -2,16 +2,7 @@ import React, { useState } from "react";
 import { Badge } from "./ui/badge";
 import { BadgeCheckIcon, EllipsisVertical, Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-type Application = {
-  company: string;
-  channel: string;
-  url?: string;
-  email?: string;
-  message: string;
-  date: string;
-  state: boolean;
-};
+import { type Application } from "@prisma/client";
 
 interface Props {
   applications: Application[];
@@ -23,7 +14,7 @@ export const ApplicationsTable: React.FC<Props> = ({ applications }) => {
   const filteredApplications = applications.filter(
     (app) =>
       app.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      app.channel.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      app.platform.toLowerCase().includes(searchTerm.toLowerCase()) ||
       app.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       app.message.toLowerCase().includes(searchTerm.toLowerCase()),
   );
@@ -62,7 +53,7 @@ export const ApplicationsTable: React.FC<Props> = ({ applications }) => {
                 <td>{app.company}</td>
                 {/* TODO: guardar localidad en la base de datos */}
                 <td>Madrid</td>
-                <td>{app.channel}</td>
+                <td>{app.platform}</td>
                 <td>
                   {app.url ? (
                     <a href={app.url} target="_blank" rel="noopener noreferrer">

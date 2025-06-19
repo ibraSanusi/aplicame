@@ -1,8 +1,16 @@
-import { ApplicationData, MessageType } from "@/lib";
+"use server";
+
+import { ApiChatResponse, MessageType, tryParseResponse } from "@/lib";
 import { NextResponse } from "next/server";
 import { OpenAI } from "openai";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+// const apiKey = process.env.OPENAI_API_KEY;
+
+// if (!apiKey) {
+//   throw new Error("La variable OPENAI_API_KEY no está definida.");
+// }
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const userInformation = {
   name: "Ibrahim Ayodeji Sanusi",
@@ -19,7 +27,9 @@ const userInformation = {
   ],
 };
 
-export async function POST(req: Request) {
+export async function POST(
+  req: Request,
+): Promise<NextResponse<ApiChatResponse>> {
   const { messages } = await req.json();
 
   const chatMessages = [
@@ -44,12 +54,12 @@ export async function POST(req: Request) {
         También asegurate de devolver la url de la pagina web de la empresa de la solicitud (importante).
         {
           company: '',
-          channel: '',
+          platform: '',
           url?: '',
           email?: '' --> el de la empresa,
           message: '',
           date: '',
-          save: '' --> true si el usuario lo quiere guardar / false si no lo quiere hacer
+          state: 'ENVIADO'
         }
       `.trim(),
     },
@@ -76,18 +86,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       response: JSON.stringify(newData),
-      save: true,
+      state: objResponse.state,
     });
   } else {
-    return NextResponse.json({ response, save: false });
-  }
-}
-
-export function tryParseResponse(response: string | null) {
-  try {
-    const json: ApplicationData = JSON.parse(response ?? "");
-    return json;
-  } catch {
-    return null;
+    return NextResponse.json({ response, state: "" });
   }
 }
