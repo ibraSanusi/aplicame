@@ -1,19 +1,20 @@
 import { db } from "@/lib/db";
+import { type Application } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 // Crear nueva solicitud
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const body: Application = await req.json();
     const application = await db.application.create({
       data: {
         company: body.company,
-        channel: body.channel,
+        platform: body.platform,
         email: body.email,
         url: body.url,
         message: body.message,
         date: body.date,
-        state: body.save,
+        state: body.state,
       },
     });
     return NextResponse.json(application);
@@ -39,16 +40,17 @@ export async function GET() {
 // Actualizar solicitud
 export async function PUT(req: Request) {
   try {
-    const body = await req.json();
+    const body: Application = await req.json();
     const solicitud = await db.application.update({
       where: { id: body.id },
       data: {
         company: body.company,
-        channel: body.channel,
+        platform: body.platform,
         email: body.email,
         url: body.url,
         message: body.message,
         date: body.date,
+        state: body.state,
       },
     });
     return NextResponse.json(solicitud);
@@ -61,7 +63,7 @@ export async function PUT(req: Request) {
 // Eliminar solicitud
 export async function DELETE(req: Request) {
   try {
-    const body = await req.json();
+    const body: Application = await req.json();
     const deleted = await db.application.delete({
       where: { id: body.id },
     });

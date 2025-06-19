@@ -1,4 +1,5 @@
 // lib/bot.ts
+import { tryParseResponse } from "./helpers";
 import { ApiChatResponse, MessageType, QueryBotResponse, Role } from "./models";
 
 /**
@@ -8,7 +9,7 @@ import { ApiChatResponse, MessageType, QueryBotResponse, Role } from "./models";
  * @returns Un objeto con la respuesta generada por el bot y un indicador `saved` que señala si se debe guardar la solicitud, o null si ocurre un error.
  */
 export async function queryBot(
-  userMessages: MessageType[]
+  userMessages: MessageType[],
 ): Promise<QueryBotResponse | null> {
   try {
     const res = await fetch("/api/chat", {
@@ -23,16 +24,33 @@ export async function queryBot(
     }
 
     const data: ApiChatResponse = await res.json();
+    if (!data.response)
+      return {
+        response: "ChatGPT no dio respuesta",
+        state: "",
+      };
+
+    console.log("Respuesta del bot:", data.response);
+
+    // Se intenta parsear el mensaje. Si GPT no devolvio el formato adecuado es que no se pudo formatear
+    const objToSave = tryParseResponse(data.response);
+    if (!objToSave) {
+      console.error("No se pudo parsear la respuesta a un Application válido");
+      return {
+        response: data.response,
+        state: "",
+      };
+    }
 
     // Validar que la respuesta tiene lo esperado
-    if (typeof data.response !== "string" || typeof data.save !== "boolean") {
+    if (typeof data.response !== "string" || typeof data.state !== "string") {
       console.error("Respuesta del bot con formato inesperado", data);
       return null;
     }
 
     return {
       response: data.response,
-      saved: data.save,
+      state: objToSave.state,
     };
   } catch (error) {
     console.error("Error al consultar al bot:", error);
@@ -43,7 +61,7 @@ export async function queryBot(
 export function addMessages(
   messages: MessageType[],
   userText: string,
-  botText: string
+  botText: string,
 ): MessageType[] {
   return [
     ...messages,

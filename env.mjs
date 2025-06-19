@@ -7,6 +7,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
   TURSO_DATABASE_URL: z.string().url(),
   TURSO_AUTH_TOKEN: z.string().min(1),
+  OPENAI_API_KEY: z.string().min(1),
 });
 
 // Parseamos las variables del entorno

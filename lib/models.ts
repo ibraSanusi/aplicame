@@ -8,16 +8,13 @@ export type MessageType = {
   text: string;
 };
 
-export type QueryBotResponse = { response: string; saved: boolean };
+export type QueryBotResponse = { response: string; state: string };
 
-export type ApplicationData = {
-  company: string;
-  channel: string;
-  url?: string;
-  email?: string; // Optional: only present if sent via email
-  message: string;
-  date: string;
-  save: boolean; // true if user wants to save, false otherwise
-};
+export enum ApplicationState {
+  ENVIADO = "ENVIADO",
+  RESPONDIDO = "RESPONDIDO",
+  REENVIADO = "REENVIADO",
+  DESCARTADO = "DESCARTADO",
+}
 
-export type ApiChatResponse = { response: string; save: boolean };
+export type ApiChatResponse = { response: string | null; state: string };

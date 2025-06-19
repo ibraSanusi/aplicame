@@ -9,12 +9,12 @@ datasource db {
 }
 
 model Application {
-    id      Int     @id @default(autoincrement())
-    company String
-    channel String // TODO: Cambiar esto a platform
-    email   String?
-    url     String?
-    message String
-    date    String
-    state   Boolean
+    id       Int     @id @default(autoincrement())
+    company  String
+    platform String
+    email    String?
+    url      String?
+    message  String
+    date     String
+    state    String  @default("ENVIADO")
 }
