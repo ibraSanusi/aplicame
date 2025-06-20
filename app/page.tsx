@@ -2,14 +2,31 @@
 
 import React, { useEffect, useState } from "react";
 import Chat from "@/components/Chat";
-import { ApplicationsTable } from "@/components/ApplicationsTable";
+// import { ApplicationsTable } from "@/components/ApplicationsTable";
 import { useApplicationStore } from "@/store/store";
 import { type Application } from "@prisma/client";
+import { columns } from "@/components/applications/columns";
+import { DataTable } from "@/components/applications/data-table";
+
+// function getData() {
+//   // Fetch data from your API here.
+//   return [
+//     {
+//       id: "728ed52f",
+//       amount: 100,
+//       status: "pending",
+//       email: "m@example.com",
+//     },
+//     // ...
+//   ];
+// }
 
 export default function HomePage() {
   const { applications, addApplication } = useApplicationStore();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // const data = getData();
 
   useEffect(() => {
     async function fetchApplications() {
@@ -45,7 +62,8 @@ export default function HomePage() {
         {error && <p className="text-red-600">Error: {error}</p>}
 
         {!loading && !error && (
-          <ApplicationsTable applications={applications} />
+          <DataTable columns={columns} data={applications} />
+          // <ApplicationsTable applications={applications} />
         )}
       </section>
     </main>

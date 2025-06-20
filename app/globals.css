@@ -137,60 +137,6 @@ textarea::-webkit-resizer {
 
 
 
-table {
-  background-color: #2c3e50;
-  width: 100%;
-  border-collapse: collapse;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 14px;
-  color: #333;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-thead tr {
-  background-color: #2c3e50;
-  color: #fff;
-  text-align: left;
-}
-
-thead th {
-  padding: 12px 15px;
-  font-weight: 600;
-}
-
-tbody tr {
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
-  transition: background-color 0.3s ease;
-}
-
-tbody tr:nth-child(even) {
-  background-color: #f7f9fc;
-}
-
-tbody tr:hover {
-  background-color: #d1e7fd;
-}
-
-tbody td {
-  padding: 12px 15px;
-  vertical-align: middle;
-  max-width: 200px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-tbody td.message {
-  max-width: 300px; /* Más ancho para mensajes */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-
 
 
 
