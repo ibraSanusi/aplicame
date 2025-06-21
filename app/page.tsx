@@ -8,25 +8,10 @@ import { type Application } from "@prisma/client";
 import { columns } from "@/components/applications/columns";
 import { DataTable } from "@/components/applications/data-table";
 
-// function getData() {
-//   // Fetch data from your API here.
-//   return [
-//     {
-//       id: "728ed52f",
-//       amount: 100,
-//       status: "pending",
-//       email: "m@example.com",
-//     },
-//     // ...
-//   ];
-// }
-
 export default function HomePage() {
   const { applications, addApplication } = useApplicationStore();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // const data = getData();
 
   useEffect(() => {
     async function fetchApplications() {
@@ -54,9 +39,9 @@ export default function HomePage() {
       {/* Columna 1: Chat */}
       <Chat />
 
-      {/* Columna 2-4: Dashboard */}
+      {/* Columna 2-4: Applications Table */}
       <section className="col-span-3 p-6">
-        <h2 className="mb-4 text-2xl font-bold">Dashboard</h2>
+        <h2 className="mb-4 text-2xl font-bold">Applications Table</h2>
 
         {loading && <p>Cargando solicitudes...</p>}
         {error && <p className="text-red-600">Error: {error}</p>}
