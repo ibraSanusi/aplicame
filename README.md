@@ -91,6 +91,16 @@ Crea un archivo `.env.local` con el siguiente contenido:
 
 ```env
 OPENAI_API_KEY=tu_clave_de_openai
+
+TURSO_DATABASE_URL="libsql://<tu-url-de-turso>"
+TURSO_AUTH_TOKEN=<tu_token_turso>
+
+GOOGLE_CLIENT_ID=<tu_client_id>
+GOOGLE_CLIENT_SECRET=<tu_client_secret>
+
+NEXTAUTH_SECRET=<una_clave_segura>
+NEXTAUTH_URL=http://localhost:3000
+
 ```
 
 ---
