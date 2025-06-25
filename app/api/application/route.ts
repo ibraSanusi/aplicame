@@ -1,9 +1,17 @@
 import { db } from "@/lib/db";
 import { type Application } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 // Crear nueva solicitud
 export async function POST(req: Request) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return new NextResponse("No autorizado", { status: 401 });
+  }
+
   try {
     const body: Application = await req.json();
     const application = await db.application.create({
@@ -13,7 +21,7 @@ export async function POST(req: Request) {
         email: body.email,
         url: body.url,
         message: body.message,
-        date: body.date,
+        createdAt: body.createdAt,
         state: body.state,
       },
     });
@@ -26,11 +34,19 @@ export async function POST(req: Request) {
 
 // Obtener todas las solicitudes
 export async function GET() {
+  const session = await getServerSession(authOptions);
+
+  console.log("Session:", session);
+
+  if (!session) {
+    return new NextResponse("No autorizado", { status: 401 });
+  }
+
   try {
-    const solicitudes = await db.application.findMany({
+    const applications = await db.application.findMany({
       orderBy: { id: "desc" },
     });
-    return NextResponse.json(solicitudes);
+    return NextResponse.json(applications);
   } catch (error) {
     console.error("Error al obtener solicitudes:", error);
     return new NextResponse("Error interno al obtener", { status: 500 });
@@ -39,9 +55,15 @@ export async function GET() {
 
 // Actualizar solicitud
 export async function PUT(req: Request) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return new NextResponse("No autorizado", { status: 401 });
+  }
+
   try {
     const body: Application = await req.json();
-    const solicitud = await db.application.update({
+    const applications = await db.application.update({
       where: { id: body.id },
       data: {
         company: body.company,
@@ -49,11 +71,11 @@ export async function PUT(req: Request) {
         email: body.email,
         url: body.url,
         message: body.message,
-        date: body.date,
+        createdAt: body.createdAt,
         state: body.state,
       },
     });
-    return NextResponse.json(solicitud);
+    return NextResponse.json(applications);
   } catch (error) {
     console.error("Error al actualizar solicitud:", error);
     return new NextResponse("Error interno al actualizar", { status: 500 });
@@ -62,6 +84,12 @@ export async function PUT(req: Request) {
 
 // Eliminar solicitud
 export async function DELETE(req: Request) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return new NextResponse("No autorizado", { status: 401 });
+  }
+
   try {
     const body: Application = await req.json();
     const deleted = await db.application.delete({
