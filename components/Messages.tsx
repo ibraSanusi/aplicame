@@ -1,3 +1,5 @@
+"use client";
+
 import { type MessageType } from "@/lib";
 import Message from "./Message";
 

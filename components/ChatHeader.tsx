@@ -1,3 +1,5 @@
+"use client";
+
 import OpenAI from "@/components/icons/open-ai";
 import { HiOutlineDocumentAdd } from "react-icons/hi";
 import { GoSidebarCollapse } from "react-icons/go";
