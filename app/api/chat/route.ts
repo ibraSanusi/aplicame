@@ -58,7 +58,7 @@ export async function POST(
           url?: '',
           email?: '' --> el de la empresa,
           message: '',
-          date: '',
+          createdAt: '',
           state: 'ENVIADO'
         }
       `.trim(),
