@@ -9,6 +9,8 @@ import { useApplication } from "@/hooks/useApplications";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ApplicationTableSkeleton } from "@/components/ApplicationTableSkeleton";
+import ButtonSkeleton from "@/components/ui/ButtonSkeleton";
 
 export default function HomePage() {
   const { status } = useSession();
@@ -44,7 +46,9 @@ export default function HomePage() {
       <section className="col-span-3 p-6">
         <header className="mb-6 flex items-center justify-between">
           <h2 className="mb-4 text-2xl font-bold">Applications Table</h2>
-          {status === "authenticated" ? (
+          {loading ? (
+            <ButtonSkeleton />
+          ) : status === "authenticated" ? (
             <LogoutButton />
           ) : (
             <Button asChild>
@@ -53,7 +57,7 @@ export default function HomePage() {
           )}
         </header>
 
-        {loading && <p>Cargando solicitudes...</p>}
+        {loading && <ApplicationTableSkeleton rows={3} />}
         {error && <p className="text-red-600">Error: {error}</p>}
 
         {!loading && !error && (
