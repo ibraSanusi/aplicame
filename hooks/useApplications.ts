@@ -12,12 +12,6 @@ export function useApplication() {
   const session = useSession();
 
   useEffect(() => {
-    if (session.status !== "authenticated") {
-      clearApplications();
-      setLoading(false);
-      return;
-    }
-
     async function fetchApplications() {
       setLoading(true);
       setError(null);
