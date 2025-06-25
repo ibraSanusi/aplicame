@@ -1,3 +1,5 @@
+"use client";
+
 // components/MessageInput.tsx
 import { useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
