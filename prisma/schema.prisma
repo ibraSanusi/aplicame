@@ -9,14 +9,16 @@ datasource db {
 }
 
 model Application {
-    id       Int     @id @default(autoincrement())
-    company  String
-    platform String
-    email    String?
-    url      String?
-    message  String
-    date     String
-    state    String  @default("ENVIADO")
+    id        Int      @id @default(autoincrement())
+    company   String
+    platform  String
+    email     String?
+    url       String?
+    message   String
+    createdAt DateTime @default(now())
+    state     String   @default("ENVIADO")
+    userId    String?
+    user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -26,8 +28,9 @@ model User {
     emailVerified DateTime?
     image         String?
 
-    accounts Account[]
-    sessions Session[]
+    accounts     Account[]
+    sessions     Session[]
+    applications Application[]
 }
 
 model Account {
