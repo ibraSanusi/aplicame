@@ -12,18 +12,20 @@ export async function queryBot(
   userMessages: MessageType[],
 ): Promise<QueryBotResponse | null> {
   try {
-    const res = await fetch("/api/chat", {
+    const chatResponse = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ messages: userMessages }),
     });
 
-    if (!res.ok) {
-      console.error(`Error HTTP: ${res.status} - ${res.statusText}`);
+    if (!chatResponse.ok) {
+      console.error(
+        `Error HTTP: ${chatResponse.status} - ${chatResponse.statusText}`,
+      );
       return null;
     }
 
-    const data: ApiChatResponse = await res.json();
+    const data: ApiChatResponse = await chatResponse.json();
     if (!data.response)
       return {
         response: "ChatGPT no dio respuesta",
