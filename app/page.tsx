@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Chat from "@/components/Chat";
 
 import { columns } from "@/components/applications/columns";
@@ -15,27 +16,6 @@ import ButtonSkeleton from "@/components/ui/ButtonSkeleton";
 export default function HomePage() {
   const { status } = useSession();
   const { loading, error, applications } = useApplication();
-
-  // useEffect(() => {}, [session]);
-  // if (status === "loading") {
-  //   return <p>Cargando sesión...</p>;
-  // }
-  // if (status === "unauthenticated") {
-  //   return <p>Debes iniciar sesión para acceder a esta página.</p>;
-  // }
-  // if (status === "authenticated") {
-  //   console.log("Usuario autenticado: ", session.user);
-  // }
-  // if (!session?.user) {
-  //   return <p>No se encontró información del usuario.</p>;
-  // }
-  // console.log("Usuario autenticado: ", session.user);
-  // console.log("Access Token: ", session.accessToken);
-  // console.log("Session: ", session);
-  // console.log("Session user: ", session.user);
-  // console.log("Session user email: ", session.user.email);
-  // console.log("Session user name: ", session.user.name);
-  // console.log("Session user image: ", session.user.image);
 
   return (
     <main className="grid min-h-dvh grid-cols-4 bg-gray-100">
