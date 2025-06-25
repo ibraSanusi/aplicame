@@ -10,11 +10,12 @@ import { showSuccessToast } from "@/lib/toast";
 import { useApplicationStore } from "@/store/store";
 
 // 🔁 Utilidad para convertir "21/6/2025" a objeto Date
-function parseDateToReminder(dateStr: string): { start: string; end: string } {
-  const [day, month, year] = dateStr.split("/");
-  const baseDate = new Date(
-    `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`,
-  );
+function parseDateToReminder(createdAt: string | Date): {
+  start: string;
+  end: string;
+} {
+  const baseDate =
+    typeof createdAt === "string" ? new Date(createdAt) : createdAt;
   const startDate = new Date(baseDate.getTime() + 14 * 24 * 60 * 60 * 1000); // +14 días
   const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // +1 hora
   return {
@@ -44,7 +45,7 @@ async function handleApplicationSave(
   localStorage.setItem("applications", JSON.stringify(applications));
 
   // Preparar y enviar evento a Google Calendar
-  const { start, end } = parseDateToReminder(objToSave.date);
+  const { start, end } = parseDateToReminder(objToSave.createdAt);
   const calendarEvent = {
     summary: `Solicitud de ${objToSave.company}`,
     description: `Solicitud enviada por ${objToSave.platform} para la empresa ${objToSave.company}.`,
