@@ -6,8 +6,12 @@ import { columns } from "@/components/applications/columns";
 import { DataTable } from "@/components/applications/data-table";
 import LogoutButton from "@/components/LogoutButton";
 import { useApplication } from "@/hooks/useApplications";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
+  const { status } = useSession();
   const { loading, error, applications } = useApplication();
 
   // useEffect(() => {}, [session]);
@@ -40,7 +44,13 @@ export default function HomePage() {
       <section className="col-span-3 p-6">
         <header className="mb-6 flex items-center justify-between">
           <h2 className="mb-4 text-2xl font-bold">Applications Table</h2>
-          <LogoutButton />
+          {status === "authenticated" ? (
+            <LogoutButton />
+          ) : (
+            <Button asChild>
+              <Link href="/login">Login</Link>
+            </Button>
+          )}
         </header>
 
         {loading && <p>Cargando solicitudes...</p>}
