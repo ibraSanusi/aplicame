@@ -47,11 +47,15 @@ export function LoginForm({
                   className="w-full"
                   type="button"
                   onClick={() =>
-                    signIn("google", {
-                      prompt: "consent",
-                      access_type: "offline",
-                      response_type: "code",
-                    })
+                    signIn(
+                      "google",
+                      {
+                        prompt: "consent",
+                        access_type: "offline",
+                        response_type: "code",
+                      },
+                      { callbackUrl: "/" },
+                    )
                   }
                 >
                   <svg
