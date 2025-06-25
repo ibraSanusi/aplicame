@@ -14,6 +14,9 @@ export async function POST(req: Request) {
 
   try {
     const body: Application = await req.json();
+
+    const user = session.user;
+
     const application = await db.application.create({
       data: {
         company: body.company,
@@ -23,6 +26,9 @@ export async function POST(req: Request) {
         message: body.message,
         createdAt: body.createdAt,
         state: body.state,
+        user: {
+          connect: { email: user?.email || "" },
+        },
       },
     });
     return NextResponse.json(application);
@@ -45,7 +51,15 @@ export async function GET() {
   try {
     const applications = await db.application.findMany({
       orderBy: { id: "desc" },
+      where: {
+        user: {
+          email: session.user?.email || "",
+        },
+      },
     });
+
+    console.log("Solicitudes obtenidas:", applications);
+
     return NextResponse.json(applications);
   } catch (error) {
     console.error("Error al obtener solicitudes:", error);
