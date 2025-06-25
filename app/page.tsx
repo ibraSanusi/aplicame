@@ -1,18 +1,13 @@
 "use client";
 
 import Chat from "@/components/Chat";
-// import { ApplicationsTable } from "@/components/ApplicationsTable";
 
 import { columns } from "@/components/applications/columns";
 import { DataTable } from "@/components/applications/data-table";
 import LogoutButton from "@/components/LogoutButton";
-import { useSession } from "next-auth/react";
 import { useApplication } from "@/hooks/useApplications";
 
 export default function HomePage() {
-  const { data: session } = useSession();
-  console.log("Session data: ", session);
-
   const { loading, error, applications } = useApplication();
 
   // useEffect(() => {}, [session]);
@@ -53,7 +48,6 @@ export default function HomePage() {
 
         {!loading && !error && (
           <DataTable columns={columns} data={applications} />
-          // <ApplicationsTable applications={applications} />
         )}
       </section>
     </main>
