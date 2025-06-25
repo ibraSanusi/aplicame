@@ -46,6 +46,12 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      console.log("Redirect URL:", url);
+      console.log("Base URL:", baseUrl);
+      // Siempre redirige a la home tras login
+      return baseUrl;
+    },
   },
   adapter: PrismaAdapter(db),
   session: {
