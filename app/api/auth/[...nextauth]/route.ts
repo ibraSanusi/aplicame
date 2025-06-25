@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
-        console.log("Google account from JWT callback:", account); // <-- esto es importante
+        console.log("Google account from JWT callback:", account);
         token.accessToken = account.access_token;
       }
       return token;
