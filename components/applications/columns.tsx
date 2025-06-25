@@ -114,10 +114,24 @@ export const columns: ColumnDef<Application>[] = [
     ),
   },
   {
-    accessorKey: "date",
+    accessorKey: "createdAt",
     header: "Date",
     cell: ({ row }) => {
-      return <div>{row.getValue("date")}</div>;
+      const value = row.getValue("createdAt");
+      // Convierte siempre a Date, aunque ya sea string o Date
+      const date = new Date(value as string);
+
+      const formatted = !isNaN(date.getTime())
+        ? date.toLocaleString("es-ES", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : "Sin fecha";
+
+      return <div>{formatted}</div>;
     },
   },
   {
