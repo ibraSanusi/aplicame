@@ -1,6 +1,7 @@
 "use server";
 
 import { ApiChatResponse, MessageType, tryParseResponse } from "@/lib";
+import { type Application } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { OpenAI } from "openai";
 
@@ -76,13 +77,13 @@ export async function POST(
 
   const response = chatCompletion.choices[0].message.content;
 
-  const objResponse = tryParseResponse(response);
+  const objResponse: Application | null = tryParseResponse(response);
 
   if (objResponse) {
-    const currentDate = new Intl.DateTimeFormat("es-ES").format(new Date());
-    // Ejemplo: "14/6/2025"
+    const currentDate = new Date();
+    // Ejemplo: "2025-06-14T18:23:45.123Z"
 
-    const newData = { ...objResponse, date: currentDate };
+    const newData = { ...objResponse, createdAt: currentDate };
 
     return NextResponse.json({
       response: JSON.stringify(newData),
