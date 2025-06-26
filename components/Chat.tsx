@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import MessageInput from "./MessageInput";
 
 import { ChatHeader } from "./ChatHeader";
