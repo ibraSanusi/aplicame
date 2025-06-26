@@ -19,10 +19,10 @@ export function useApplication() {
         const applicationResponse = await fetch("/api/application");
         if (!applicationResponse.ok)
           throw new Error("Error al cargar las solicitudes");
-        const data: Application[] = await applicationResponse.json();
+        const applications: Application[] = await applicationResponse.json();
 
         clearApplications();
-        data.forEach(addApplication);
+        applications.forEach(addApplication);
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message);
