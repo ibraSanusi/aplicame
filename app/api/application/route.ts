@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { type Application } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 
 // Crear nueva solicitud
 export async function POST(req: Request) {
@@ -14,18 +14,18 @@ export async function POST(req: Request) {
 
   try {
     const body: Application = await req.json();
-
+    const { company, platform, email, url, message, createdAt, state } = body;
     const user = session.user;
 
     const application = await db.application.create({
       data: {
-        company: body.company,
-        platform: body.platform,
-        email: body.email,
-        url: body.url,
-        message: body.message,
-        createdAt: body.createdAt,
-        state: body.state,
+        company,
+        platform,
+        email,
+        url,
+        message,
+        createdAt,
+        state,
         user: {
           connect: { email: user?.email || "" },
         },
