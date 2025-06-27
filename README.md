@@ -74,12 +74,12 @@ npm run dev
 
 ```json
 {
-  "empresa": "Playtomic",
-  "canal": "Correo",
-  "correo": "recruiter@playtomic.io",
-  "mensaje": "Hola, soy Ibrahim Ayodeji...",
-  "fecha": "2025-06-14",
-  "estado": "Enviado"
+  "company": "Playtomic",
+  "platform": "Correo",
+  "email": "recruiter@playtomic.io",
+  "message": "Hola, soy Ibrahim Ayodeji...",
+  "createdAt": "2025-06-26T19:39:37.975+00:00",
+  "state": "Enviado"
 }
 ```
 
