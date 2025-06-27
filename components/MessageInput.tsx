@@ -1,7 +1,7 @@
 "use client";
 
 // components/MessageInput.tsx
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 
 export default function MessageInput({
@@ -11,7 +11,7 @@ export default function MessageInput({
 }) {
   const [text, setText] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (text.trim()) {
       onSend(text);
