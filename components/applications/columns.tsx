@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Application } from "@prisma/client";
-import { ApplicationState } from "@/lib";
+import { ApplicationState } from "@/lib/models";
 
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";

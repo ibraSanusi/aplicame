@@ -20,7 +20,8 @@ export default defineConfig([
     rules: {
       "no-unused-vars": "warn",
       "no-undef": "warn",
-      "no-console": "warn",
+      "react/react-in-jsx-scope": "off",
+      // "no-console": "warn",
     },
   },
 ]);

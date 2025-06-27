@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Chat from "@/components/Chat";
 
 import { columns } from "@/components/applications/columns";
