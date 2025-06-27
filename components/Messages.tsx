@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { type MessageType } from "@/lib";
 import Message from "./Message";
 
