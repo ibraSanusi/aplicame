@@ -3,11 +3,21 @@
 import { type MessageType } from "@/lib";
 import Message from "./Message";
 
-export const Messages = ({ messages }: { messages: MessageType[] }) => {
+interface MessagesProps {
+  messages: MessageType[];
+  loadingMessage: boolean;
+}
+
+export const Messages = ({ messages, loadingMessage }: MessagesProps) => {
   return (
     <div className="flex-1 space-y-2 py-4">
       {messages.map((msg, idx) => (
-        <Message key={idx} role={msg.role} text={msg.text} />
+        <Message
+          loadingMessage={loadingMessage}
+          key={idx}
+          role={msg.role}
+          text={msg.text}
+        />
       ))}
     </div>
   );

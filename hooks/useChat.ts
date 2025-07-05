@@ -16,6 +16,7 @@ import {
 
 export function useChat(initialMessages: MessageType[] = []) {
   const [messages, setMessages] = useState<MessageType[]>(initialMessages);
+  const [loadingMessage, setLoadingMessage] = useState(false);
   const session = useSession();
 
   const store = useApplicationStore.getState();
@@ -52,6 +53,9 @@ export function useChat(initialMessages: MessageType[] = []) {
     const userMessage = { role: Role.User, text };
     const updatedMessages = [...messages, userMessage];
 
+    setLoadingMessage(true);
+    setMessages(updatedMessages);
+
     try {
       const botResponse = await queryBot(updatedMessages);
       if (!botResponse) return;
@@ -64,8 +68,10 @@ export function useChat(initialMessages: MessageType[] = []) {
       toast("Error al guardar la solicitud", {
         description: "Revisa la consola",
       });
+    } finally {
+      setLoadingMessage(false);
     }
   };
 
-  return { messages, handleSend };
+  return { messages, loadingMessage, handleSend };
 }
