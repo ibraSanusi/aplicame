@@ -32,14 +32,15 @@ Una aplicación web que te ayuda a generar y registrar solicitudes de empleo med
 
 ```bash
 # 1. Clona el repositorio
-git clone https://github.com/tuusuario/job-app-chatbot.git
-cd job-app-chatbot
+git clone https://github.com/ibraSanusi/aplicame.git
+cd aplicame
 
 # 2. Instala dependencias
 npm install
 
 # 3. Crea un archivo .env.local y agrega tu API key de OpenAI
 OPENAI_API_KEY=tu_clave_aquí
+...
 
 # 4. Inicia el servidor de desarrollo
 npm run dev
@@ -107,8 +108,8 @@ NEXTAUTH_URL=http://localhost:3000
 
 ## 🧪 TODOs / Futuras mejoras
 
-* [ ] Persistencia en base de datos (ej. PostgreSQL o SQLite)
-* [ ] Filtrado y visualización del historial de solicitudes
+* [x] Persistencia en base de datos (ej. PostgreSQL o SQLite)
+* [x] Filtrado y visualización del historial de solicitudes
 * [ ] Exportar a CSV/Excel
 * [ ] Integración con LinkedIn API
 * [ ] Soporte multilenguaje
