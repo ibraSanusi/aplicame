@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { type Application } from "@prisma/client";
@@ -73,5 +73,14 @@ export function useChat(initialMessages: MessageType[] = []) {
     }
   };
 
-  return { messages, loadingMessage, handleSend };
+  const resetMessages = () => {
+    console.log("initialMessages: ", initialMessages);
+    setMessages(initialMessages);
+  };
+
+  useEffect(() => {
+    console.log("messages cleared: ", messages);
+  }, [messages]);
+
+  return { messages, loadingMessage, handleSend, resetMessages };
 }
