@@ -2,7 +2,6 @@
 
 import OpenAI from "@/components/icons/open-ai";
 import { HiOutlineDocumentAdd } from "react-icons/hi";
-import { GoSidebarCollapse } from "react-icons/go";
 import { Button } from "./ui/my-button";
 
 interface ChatHeaderProps {
@@ -21,9 +20,6 @@ export function ChatHeader({ resetMessages }: ChatHeaderProps) {
           <HiOutlineDocumentAdd />
           New Chat
         </Button>
-        <button className="cursor-pointer bg-transparent text-black hover:text-blue-600">
-          <GoSidebarCollapse className="size-5" />
-        </button>
       </div>
     </header>
   );
