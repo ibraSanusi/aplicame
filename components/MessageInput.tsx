@@ -1,7 +1,7 @@
 "use client";
 
 // components/MessageInput.tsx
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 
 interface MessageInputProps {
@@ -10,6 +10,7 @@ interface MessageInputProps {
 
 export default function MessageInput({ onSend }: MessageInputProps) {
   const [text, setText] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -21,14 +22,14 @@ export default function MessageInput({ onSend }: MessageInputProps) {
 
   return (
     <div className="sticky right-5 bottom-5 left-5 z-50 mt-4 flex w-[425px] gap-2">
-      <form onSubmit={handleSubmit} className="relative">
+      <form ref={formRef} onSubmit={handleSubmit} className="relative">
         <textarea
           name="message"
-          // onKeyDown={(event) => {
-          //   if (event.key === "Enter" && !event.shiftKey) {
-          //     formRef.current?.requestSubmit();
-          //   }
-          // }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" && !event.shiftKey) {
+              formRef.current?.requestSubmit();
+            }
+          }}
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Escribe tu mensaje..."
