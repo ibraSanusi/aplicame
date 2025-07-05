@@ -4,11 +4,11 @@
 import { FormEvent, useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 
-export default function MessageInput({
-  onSend,
-}: {
+interface MessageInputProps {
   onSend: (text: string) => void;
-}) {
+}
+
+export default function MessageInput({ onSend }: MessageInputProps) {
   const [text, setText] = useState("");
 
   const handleSubmit = (e: FormEvent) => {

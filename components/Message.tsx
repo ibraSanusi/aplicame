@@ -4,13 +4,15 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Clipboard, Check } from "lucide-react"; // Iconos
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
-type Props = {
+interface MessageProps {
   role: "user" | "bot";
   text: string;
-};
+  loadingMessage: boolean;
+}
 
-export default function Message({ role, text }: Props) {
+export default function Message({ role, text, loadingMessage }: MessageProps) {
   const isUser = role === "user";
   const [copied, setCopied] = useState(false);
 
@@ -29,9 +31,11 @@ export default function Message({ role, text }: Props) {
       className={`mb-3 flex w-full ${isUser ? "justify-end" : "justify-start"}`}
     >
       <div
-        className={`group relative max-w-[80%] rounded-xl px-4 py-3 break-words whitespace-pre-wrap ${
-          isUser ? "bg-blue-500 text-white" : "bg-gray-100 text-black"
-        }`}
+        className={cn(
+          "group relative max-w-[80%] rounded-xl px-4 py-3 break-words whitespace-pre-wrap",
+          isUser ? "bg-blue-500 text-white" : "bg-gray-100 text-black",
+          loadingMessage ? "animate-pulse" : "animate-none",
+        )}
       >
         <ReactMarkdown
           className="prose prose-sm max-w-none"
