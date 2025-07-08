@@ -27,6 +27,7 @@ export default function MessageInput({ onSend }: MessageInputProps) {
           name="message"
           onKeyDown={(event) => {
             if (event.key === "Enter" && !event.shiftKey) {
+              event.preventDefault();
               formRef.current?.requestSubmit();
             }
           }}
