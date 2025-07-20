@@ -1,7 +1,5 @@
 // components/Message.tsx
 
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { Clipboard, Check } from "lucide-react"; // Iconos
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -37,12 +35,7 @@ export default function Message({ role, text, loadingMessage }: MessageProps) {
           loadingMessage ? "animate-pulse" : "animate-none",
         )}
       >
-        <ReactMarkdown
-          className="prose prose-sm max-w-none"
-          remarkPlugins={[remarkGfm]}
-        >
-          {text}
-        </ReactMarkdown>
+        {text}
 
         {!isUser && (
           <button
