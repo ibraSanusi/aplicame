@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
-import { type Application } from "@prisma/client";
 import { useApplicationStore } from "@/store/store";
 import { showSuccessToast } from "@/lib/toast";
-import { ApplicationState, MessageType, Role } from "@/lib";
+import { ApplicationState, ApplicationType, MessageType, Role } from "@/lib";
 import { addMessages, queryBot } from "@/lib/bot";
 import {
   createCalendarEvent,
@@ -21,7 +20,7 @@ export function useChat(initialMessages: MessageType[] = []) {
 
   const store = useApplicationStore.getState();
 
-  const persistApplication = async (app: Application) => {
+  const persistApplication = async (app: ApplicationType) => {
     const response = await saveApplication(app);
     if (!response.ok) throw new Error("Error al guardar aplicación");
     store.addApplication(app);
@@ -31,7 +30,7 @@ export function useChat(initialMessages: MessageType[] = []) {
   const processBotResponse = async (state: string, response: string) => {
     if (state !== ApplicationState.ENVIADO) return response;
 
-    const application = JSON.parse(response) as Application;
+    const application = JSON.parse(response) as ApplicationType;
     const accessToken = session.data?.accessToken;
 
     const calendar = await createCalendarEvent(application, accessToken);

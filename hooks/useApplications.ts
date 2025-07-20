@@ -4,8 +4,13 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 export function useApplication() {
-  const { applications, addApplication, clearApplications } =
-    useApplicationStore();
+  const {
+    applications,
+    addApplication,
+    clearApplications,
+    removeApplication,
+    setApplication,
+  } = useApplicationStore();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -41,5 +46,5 @@ export function useApplication() {
     fetchApplications();
   }, [session.status, addApplication, clearApplications]);
 
-  return { applications, loading, error };
+  return { applications, loading, error, removeApplication, setApplication };
 }

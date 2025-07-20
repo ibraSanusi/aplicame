@@ -1,8 +1,8 @@
 import { db } from "@/lib/db";
-import { type Application } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authOptions";
+import { ApplicationType } from "@/lib";
 
 // Crear nueva solicitud
 export async function POST(req: Request) {
@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const body: Application = await req.json();
+    const body: ApplicationType = await req.json();
     const { company, platform, email, url, message, createdAt, state } = body;
     const user = session.user;
 
@@ -76,17 +76,17 @@ export async function PUT(req: Request) {
   }
 
   try {
-    const body: Application = await req.json();
+    const body: Partial<ApplicationType> = await req.json();
+    const { id, company, platform, email, url, message, state } = body;
     const applications = await db.application.update({
-      where: { id: body.id },
+      where: { id },
       data: {
-        company: body.company,
-        platform: body.platform,
-        email: body.email,
-        url: body.url,
-        message: body.message,
-        createdAt: body.createdAt,
-        state: body.state,
+        company,
+        platform,
+        email,
+        url,
+        message,
+        state,
       },
     });
     return NextResponse.json(applications);
@@ -105,7 +105,7 @@ export async function DELETE(req: Request) {
   }
 
   try {
-    const body: Application = await req.json();
+    const body: ApplicationType = await req.json();
     const deleted = await db.application.delete({
       where: { id: body.id },
     });

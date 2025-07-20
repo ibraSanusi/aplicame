@@ -8,13 +8,37 @@ export type MessageType = {
   text: string;
 };
 
+export type ApplicationType = {
+  id: number;
+  company: string;
+  platform: string;
+  email: string | null;
+  url: string | null;
+  message: string;
+  createdAt: Date;
+  state: string;
+  userId: string | null;
+};
+
 export type QueryBotResponse = { response: string; state: string };
+
+export type EditableFields = Extract<
+  keyof ApplicationType,
+  "company" | "email" | "message" | "platform" | "state" | "url"
+>;
 
 export enum ApplicationState {
   ENVIADO = "ENVIADO",
   RESPONDIDO = "RESPONDIDO",
   REENVIADO = "REENVIADO",
   DESCARTADO = "DESCARTADO",
+}
+
+export interface EditModalProps {
+  open: boolean;
+  closeModal: () => void;
+  application: ApplicationType;
+  onEdit: (updatedFields: Partial<ApplicationType>) => Promise<void>;
 }
 
 export type ApiChatResponse = { response: string | null; state: string };

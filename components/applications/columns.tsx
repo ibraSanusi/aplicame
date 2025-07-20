@@ -15,13 +15,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Application } from "@prisma/client";
-import { ApplicationState } from "@/lib/models";
+import { ApplicationState, ApplicationType } from "@/lib/models";
 
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useActions } from "@/hooks/useActions";
+import EditModal from "../EditModal";
+import DeleteModal from "../DeleteModal";
+import { deleteApplication, updateApplication } from "@/lib/chat/services";
+import { showSuccessToast } from "@/lib/toast";
+import { useApplication } from "@/hooks/useApplications";
 
-export const columns: ColumnDef<Application>[] = [
+export const columns: ColumnDef<ApplicationType>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -160,28 +165,91 @@ export const columns: ColumnDef<Application>[] = [
     cell: ({ row }) => {
       const application = row.original;
 
+      const {
+        openEdit,
+        openDelete,
+        openEditModal,
+        closeEditModal,
+        openDeleteModal,
+        closeDeleteModal,
+      } = useActions();
+
+      const { removeApplication, setApplication: refreshApplication } =
+        useApplication();
+
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() =>
-                navigator.clipboard.writeText(application.id.toString())
+        <>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() =>
+                  navigator.clipboard.writeText(JSON.stringify(application))
+                }
+              >
+                Copy application JSON
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={openEditModal}>
+                Edit application
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={openDeleteModal}>
+                Delete application
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <EditModal
+            onEdit={async (updatedFields: Partial<ApplicationType>) => {
+              const response = await updateApplication(
+                updatedFields,
+                application.id,
+              );
+
+              if (response.status === 200) {
+                showSuccessToast(
+                  `${application.company} ha sido actualizado correctamente en la base de datos.`,
+                );
+                refreshApplication(response.data);
+              } else {
+                showSuccessToast(
+                  `${application.company} no se ha podido actulizar en la base de datos.`,
+                );
+                return Promise.reject();
               }
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+
+              console.log(response);
+            }}
+            application={application}
+            closeModal={closeEditModal}
+            open={openEdit}
+          />
+          <DeleteModal
+            onDelete={async () => {
+              const applicationId = application.id;
+              const response = await deleteApplication(applicationId);
+
+              if (response.status === 200) {
+                showSuccessToast(
+                  `${application.company} ha sido eliminado de la base de datos.`,
+                );
+                removeApplication(applicationId);
+              } else {
+                showSuccessToast(
+                  `${application.company} no se ha podido eliminar de la base de datos.`,
+                );
+                return Promise.reject();
+              }
+            }}
+            closeModal={closeDeleteModal}
+            open={openDelete}
+          />
+        </>
       );
     },
   },
