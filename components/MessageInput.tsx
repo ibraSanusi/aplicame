@@ -21,8 +21,8 @@ export default function MessageInput({ onSend }: MessageInputProps) {
   };
 
   return (
-    <div className="sticky right-5 bottom-5 left-5 z-50 mt-4 flex w-[425px] gap-2">
-      <form ref={formRef} onSubmit={handleSubmit} className="relative">
+    <div className="sticky right-5 bottom-5 left-5 z-50 mt-4 flex max-w-[425px] gap-2">
+      <form ref={formRef} onSubmit={handleSubmit} className="relative w-full">
         <textarea
           name="message"
           onKeyDown={(event) => {
@@ -34,13 +34,13 @@ export default function MessageInput({ onSend }: MessageInputProps) {
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Escribe tu mensaje..."
-          className="border-border placeholder:text-placeholder flex field-sizing-content max-h-[175px] min-h-20 w-[425px] flex-grow items-start rounded-md border bg-white/70 p-3 backdrop-blur-lg outline-none placeholder:text-sm"
+          className="border-border placeholder:text-placeholder flex field-sizing-content max-h-[175px] min-h-20 w-full flex-grow items-start rounded-md border bg-white/70 p-3 backdrop-blur-lg outline-none placeholder:text-sm"
         />
 
         <button
           type="submit"
           className="bg-dark absolute right-2 bottom-2 flex h-8 w-8 items-center justify-center rounded-full bg-[#1B98E0] p-2 transition-colors hover:bg-[#157ab7]"
-          // disabled={isLoading}
+        // disabled={isLoading}
         >
           <AiOutlineSend color="#ffffff" width={12} height={14} />
         </button>
