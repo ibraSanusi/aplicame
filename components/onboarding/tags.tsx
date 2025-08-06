@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { ReactNode } from "react";
+import { ReactNode, MouseEvent } from "react";
 
 export function Tag({
   children,
@@ -8,7 +8,7 @@ export function Tag({
 }: {
   children: ReactNode;
   tagColor: string;
-  onRemove?: () => void;
+  onRemove?: (e: MouseEvent<HTMLButtonElement>) => void;
 }) {
   return (
     <span
@@ -19,7 +19,7 @@ export function Tag({
     >
       {children}
       {onRemove && (
-        <button type="button" onClick={onRemove}>
+        <button value={children?.toString()} type="button" onClick={onRemove}>
           ✕
         </button>
       )}

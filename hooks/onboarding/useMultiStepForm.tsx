@@ -82,6 +82,20 @@ export const useMultiStepForm = () => {
     }
   };
 
+  const handleRemoveSkill = (e: MouseEvent<HTMLButtonElement>) => {
+    const skillToEliminate = e.currentTarget?.value;
+    const remainingSkills = skills.filter(
+      (skill) => skill !== skillToEliminate,
+    );
+
+    setSkills(remainingSkills);
+
+    setFormData((prev) => ({
+      ...prev,
+      [currentKey]: remainingSkills,
+    }));
+  };
+
   return {
     progressValue,
     count,
@@ -96,6 +110,7 @@ export const useMultiStepForm = () => {
     formRef,
     formData,
     minimusSkills,
+    handleRemoveSkill,
     handleForwardBotton,
     handlePreviousBotton,
     handleSubmit,
