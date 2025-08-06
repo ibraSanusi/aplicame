@@ -21,6 +21,10 @@ module.exports = {
         source: "/chat",
         destination: "/pages/chat",
       },
+      {
+        source: "/onboarding",
+        destination: "/pages/onboarding",
+      },
     ];
   },
 };

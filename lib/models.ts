@@ -27,6 +27,19 @@ export type EditableFields = Extract<
   "company" | "email" | "message" | "platform" | "state" | "url"
 >;
 
+export type UserInformationFields = Extract<
+  keyof UserInformationType,
+  "name" | "email" | "mobile" | "position" | "skills"
+>;
+
+export type UserInformationType = {
+  name: string,
+  email: string,
+  mobile: number,
+  position: string,
+  skills: [],
+};
+
 export enum ApplicationState {
   ENVIADO = "ENVIADO",
   RESPONDIDO = "RESPONDIDO",
