@@ -33,6 +33,7 @@ export default function Page() {
     isSkillField,
     skills,
     minimusSkills,
+    handleRemoveSkill,
     handleForwardBotton,
     handlePreviousBotton,
     handleSubmit,
@@ -71,6 +72,7 @@ export default function Page() {
                     <Tag
                       tagColor={badgesColors[index % badgesColors.length]}
                       key={skill + index}
+                      onRemove={handleRemoveSkill}
                     >
                       {skill}
                     </Tag>
