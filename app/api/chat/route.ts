@@ -5,12 +5,6 @@ import { type Application } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { OpenAI } from "openai";
 
-// const apiKey = process.env.OPENAI_API_KEY;
-
-// if (!apiKey) {
-//   throw new Error("La variable OPENAI_API_KEY no está definida.");
-// }
-
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const userInformation = {
