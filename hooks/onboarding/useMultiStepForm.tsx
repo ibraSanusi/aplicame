@@ -18,7 +18,8 @@ export const useMultiStepForm = () => {
   const currentKey = fieldKeys[count];
   const currentField = userInformationFields[currentKey];
 
-  const minimusSkills = 5; // Minimo de skills que tiene que rellenar el usuario
+  const minimumSkills = 5; // Minimo de skills que tiene que rellenar el usuario
+  const hasMinimumSkills = skills.length >= minimumSkills;
 
   const canFoward = count >= fieldKeys.length;
   const canPrevious = count <= 0;
@@ -38,10 +39,23 @@ export const useMultiStepForm = () => {
     if (!canPrevious) setCount((prev) => prev - 1);
   };
 
+  // Si esta en el ultimo paso querré enviar el formalario
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!isSkillField) return;
 
+    if (isSkillField && hasMinimumSkills) {
+      console.log("Hola mmg");
+      return submitUserInformation(e);
+    }
+    return addNewSkill();
+  };
+
+  const submitUserInformation = (e: FormEvent) => {
+    return e;
+  };
+
+  const addNewSkill = () => {
     if (text.trim()) {
       setSkills((prev) => [...prev, text]);
       setText("");
@@ -54,8 +68,10 @@ export const useMultiStepForm = () => {
       [currentKey]: isSkillField ? skills : text,
     }));
 
-    increase(e);
-    setText("");
+    if (!isSkillField) {
+      increase(e);
+      setText("");
+    }
   };
 
   // Se clickó el botón de back o next
@@ -109,7 +125,7 @@ export const useMultiStepForm = () => {
     isInputTextEmpty,
     formRef,
     formData,
-    minimusSkills,
+    minimumSkills,
     handleRemoveSkill,
     handleForwardBotton,
     handlePreviousBotton,

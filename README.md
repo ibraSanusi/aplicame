@@ -1,7 +1,3 @@
-
-
-
-
 # Job Application Tracker Chatbot 🤖📄
 
 Una aplicación web que te ayuda a generar y registrar solicitudes de empleo mediante un chatbot inteligente. Desarrollada con **Next.js**, **Tailwind CSS** y la **API de OpenAI**.
@@ -44,9 +40,22 @@ OPENAI_API_KEY=tu_clave_aquí
 
 # 4. Inicia el servidor de desarrollo
 npm run dev
-````
+```
 
 ---
+
+## Migración de base de datos
+
+```bash
+# 1. Generate
+npx prisma generate
+# 2. Migrate
+npx prisma migrate <migration-name>
+# 3. Upload
+turso db destroy <database-name>
+turso db import prisma/<database-name>.db --group default
+
+```
 
 ## 📁 Estructura principal
 
@@ -108,11 +117,11 @@ NEXTAUTH_URL=http://localhost:3000
 
 ## 🧪 TODOs / Futuras mejoras
 
-* [x] Persistencia en base de datos (ej. PostgreSQL o SQLite)
-* [x] Filtrado y visualización del historial de solicitudes
-* [ ] Exportar a CSV/Excel
-* [ ] Integración con LinkedIn API
-* [ ] Soporte multilenguaje
+- [x] Persistencia en base de datos (ej. PostgreSQL o SQLite)
+- [x] Filtrado y visualización del historial de solicitudes
+- [ ] Exportar a CSV/Excel
+- [ ] Integración con LinkedIn API
+- [ ] Soporte multilenguaje
 
 ---
 
@@ -128,8 +137,3 @@ NEXTAUTH_URL=http://localhost:3000
 ## 📄 Licencia
 
 MIT © 2025 - Uso libre para fines personales o educativos.
-
-
-
-
-
