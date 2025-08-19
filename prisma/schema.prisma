@@ -27,7 +27,7 @@ model User {
     email         String?       @unique
     emailVerified DateTime?
     image         String?
-    skills        Skill[]
+    skills        UserSkill[]
     accounts      Account[]
     sessions      Session[]
     applications  Application[]
@@ -35,8 +35,19 @@ model User {
 
 model Skill {
     id    String @id @default(cuid())
-    name  String
-    users User[]
+    name  String @unique
+    users UserSkill[]
+}
+
+// Tabla intermedia para la relación muchos a muchos
+model UserSkill {
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  skill   Skill   @relation(fields: [skillId], references: [id])
+  skillId String
+
+  @@id([userId, skillId]) // clave primaria compuesta
 }
 
 model Account {
