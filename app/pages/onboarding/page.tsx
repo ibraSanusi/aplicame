@@ -32,7 +32,7 @@ export default function Page() {
     text,
     isSkillField,
     skills,
-    minimusSkills,
+    minimumSkills,
     handleRemoveSkill,
     handleForwardBotton,
     handlePreviousBotton,
@@ -97,10 +97,11 @@ export default function Page() {
             Back
           </SmartButton>
           <SmartButton
+            type={isSkillField ? "submit" : "button"}
             isDisabled={
               canFoward ||
               (!isSkillField && !isInputTextEmpty) ||
-              (isSkillField && skills.length < minimusSkills)
+              (isSkillField && skills.length < minimumSkills)
             }
             onClick={handleForwardBotton}
           >
