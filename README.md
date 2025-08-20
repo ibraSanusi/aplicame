@@ -50,7 +50,7 @@ npm run dev
 # 1. Generate
 npx prisma generate
 # 2. Migrate
-npx prisma migrate <migration-name>
+npx prisma migrate dev --name <migration-name>
 # 3. Upload
 turso db destroy <database-name>
 turso db import prisma/<database-name>.db --group default

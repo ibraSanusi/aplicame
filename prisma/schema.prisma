@@ -27,6 +27,8 @@ model User {
     email         String?       @unique
     emailVerified DateTime?
     image         String?
+    mobile        String?
+    position      String?
     skills        UserSkill[]
     accounts      Account[]
     sessions      Session[]
