@@ -33,11 +33,11 @@ export type UserInformationFields = Extract<
 >;
 
 export type UserInformationType = {
-  name: string,
-  email: string,
-  mobile: number,
-  position: string,
-  skills: [],
+  name: string;
+  email: string;
+  mobile: number;
+  position: string;
+  skills?: string[];
 };
 
 export enum ApplicationState {
