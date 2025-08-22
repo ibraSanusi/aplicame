@@ -55,6 +55,9 @@ npx prisma migrate dev --name <migration-name>
 turso db destroy <database-name>
 turso db import prisma/<database-name>.db --group default
 
+# Allso upload
+turso db shell aplicame-dev < prisma/migrations/20250819195839_add_mobile_position_fields_to_user/migration.sql # También puedes volcar los datos así
+
 ```
 
 ## 📁 Estructura principal
