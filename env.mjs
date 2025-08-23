@@ -5,8 +5,8 @@ import { z } from "zod";
 // Define el esquema
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
-  TURSO_DATABASE_URL: z.string().url(),
-  TURSO_AUTH_TOKEN: z.string().min(1),
+  TURSO_DATABASE_URL: z.string().optional(),
+  TURSO_AUTH_TOKEN: z.string().min(1).optional(),
   OPENAI_API_KEY: z.string().min(1),
   NEXTAUTH_SECRET: z.string().min(1),
   NEXTAUTH_URL: z.string().url(),
