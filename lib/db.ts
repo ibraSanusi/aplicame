@@ -7,19 +7,31 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-const libsql = createClient({
-  url: env.TURSO_DATABASE_URL ?? "",
-  authToken: env.TURSO_AUTH_TOKEN ?? "",
-});
+function createDB() {
+  if (env.NODE_ENV === "development") {
+    // DB local de desarrollo
+    return new PrismaClient({
+      datasources: {
+        db: { url: process.env.DATABASE_URL },
+      },
+      log: ["query", "error", "warn"],
+    });
+  } else {
+    const libsql = createClient({
+      url: env.TURSO_DATABASE_URL ?? "",
+      authToken: env.TURSO_AUTH_TOKEN ?? "",
+    });
 
-const adapter = new PrismaLibSQL(libsql);
+    const adapter = new PrismaLibSQL(libsql);
+    // DB remota de producción
+    return new PrismaClient({
+      adapter,
+      log: ["error"],
+    });
+  }
+}
 
-export const db =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    adapter,
-    log:
-      env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
-  });
+// Exportar instancia global para evitar múltiples conexiones
+export const db = globalForPrisma.prisma ?? createDB();
 
 if (env.NODE_ENV !== "production") globalForPrisma.prisma = db;
