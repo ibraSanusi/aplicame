@@ -8,40 +8,52 @@ import { UserInformationType } from "@/lib";
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    return new NextResponse("No autorizado", { status: 401 });
+  if (!session?.user?.email) {
+    return NextResponse.json(
+      { success: false, data: null, error: "No autorizado" },
+      { status: 401 },
+    );
   }
 
   try {
-    const body: UserInformationType = await req.json();
-    const { email, mobile, name: userName, position, skills } = body;
+    const body: Partial<UserInformationType> = await req.json();
+    const { mobile, name: userName, position, skills } = body;
 
-    const user = session.user;
-
-    // Buscar skills existentes en la tabla Skill
-    const foundSkills = await db.skill.findMany({
-      where: {
-        name: {
-          in: skills,
-        },
-      },
+    const userInSession = await db.user.findUnique({
+      where: { email: session.user.email },
     });
 
-    //  Actualizar el usuario y asociar skills encontrados
+    if (!userInSession) {
+      return NextResponse.json(
+        {
+          success: false,
+          data: null,
+          error: "Usuario en sesión no encontrado",
+        },
+        { status: 404 },
+      );
+    }
+
+    // Guardar skills del usuario
+    const createdUserSkills = skills
+      ? await Promise.all(
+          skills.map((skill) =>
+            db.userSkill.create({
+              data: { skillId: skill.id, userId: userInSession.id },
+            }),
+          ),
+        )
+      : [];
+
+    console.log({ createdUserSkills });
+
+    //  Actualizar el usuario (position, mobile)
     const updatedUser = await db.user.update({
-      where: { email: user?.email || "" },
+      where: { email: session.user.email },
       data: {
         name: userName,
         mobile: mobile?.toString(),
-        email,
         position,
-        skills: {
-          create: foundSkills.map((skill) => ({
-            skill: {
-              connect: { id: skill.id }, // conecta por id del skill existente
-            },
-          })),
-        },
       },
       include: {
         skills: {
@@ -51,9 +63,44 @@ export async function POST(req: Request) {
         },
       },
     });
-    return NextResponse.json(updatedUser);
+
+    return NextResponse.json({ success: true, data: updatedUser, error: null });
   } catch (error) {
-    console.error("Error al crear solicitud:", error);
-    return new NextResponse("Error interno al crear", { status: 500 });
+    console.error("Error al actulizar la información del usuario.", error);
+    return NextResponse.json(
+      {
+        success: false,
+        data: null,
+        error: "Error interno al actualizar información",
+      },
+      { status: 500 },
+    );
+  }
+}
+
+// Recuperar las skills de la base de datos para que el usuario las seleccione.
+export async function GET() {
+  // const session = await getServerSession(authOptions);
+
+  // if (!session) {
+  //   return new NextResponse("No autorizado", { status: 401 });
+  // }
+
+  try {
+    const skills = await db.skill.findMany();
+    if (!Array.isArray(skills)) {
+      return NextResponse.json(
+        {
+          success: false,
+          data: null,
+          error: "Skills inválidas",
+        },
+        { status: 400 },
+      );
+    }
+    return NextResponse.json({ success: true, data: skills, error: null });
+  } catch (error) {
+    console.error("Error al recuperar las skills.:", error);
+    return new NextResponse("Error interno al reperar skills", { status: 500 });
   }
 }
