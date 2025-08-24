@@ -1,10 +1,10 @@
 "use client";
 
 // components/MessageInput.tsx
-import { FormEvent } from "react";
+import { FormEvent, KeyboardEvent } from "react";
 import { AiOutlineSend } from "react-icons/ai";
-import { TextArea } from "./textarea";
-import { useTextarea } from "@/hooks/useTextarea";
+import { TextArea } from "@/components/textarea";
+import { useTextarea } from "../hooks/useTextarea";
 
 interface MessageInputProps {
   onSend: (text: string) => void;
@@ -21,6 +21,13 @@ export default function MessageInput({ onSend }: MessageInputProps) {
     }
   };
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      formRef.current?.requestSubmit();
+    }
+  };
+
   return (
     <div className="sticky right-5 bottom-5 left-5 z-50 mt-4 flex max-w-[425px] gap-2">
       <form ref={formRef} onSubmit={handleSubmit} className="relative w-full">
@@ -30,6 +37,7 @@ export default function MessageInput({ onSend }: MessageInputProps) {
           onChange={(e) => setText(e.target.value)}
           text={text}
           formRef={formRef}
+          onKeyDown={handleKeyDown}
         />
 
         <button

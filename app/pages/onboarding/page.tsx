@@ -1,8 +1,10 @@
 "use client";
 
+import SkillSuggestion from "@/components/onboarding/skill-suggestion";
 import { SmartButton } from "@/components/onboarding/smart-button";
 import { Tag } from "@/components/onboarding/tags";
 import { TextArea } from "@/components/textarea";
+
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { useMultiStepForm } from "@/hooks/onboarding/useMultiStepForm";
@@ -30,14 +32,18 @@ export default function Page() {
     isInputTextEmpty,
     formRef,
     text,
+    inputText,
     isSkillField,
     skills,
     minimumSkills,
+    filteredSkills,
     handleRemoveSkill,
     handleForwardBotton,
     handlePreviousBotton,
     handleSubmit,
     setText,
+    setInputText,
+    handleKeyDown,
   } = useMultiStepForm();
 
   return (
@@ -58,34 +64,42 @@ export default function Page() {
               {currentField.title}
             </label>
 
-            {isSkillField ? (
+            {isSkillField && filteredSkills ? (
               <>
-                <TextArea
-                  name="skills"
-                  placeholder="Escribe tus skills..."
-                  onChange={(e) => setText(e.target.value)}
-                  text={text}
-                  formRef={formRef}
-                />
-                <div className="flex max-h-[220px] flex-wrap gap-4 overflow-scroll">
+                <div
+                  className={`relative flex rounded-t-md bg-blue-200 ${filteredSkills.length > 0 || "rounded-b-md"}`}
+                >
+                  {" "}
+                  <TextArea
+                    name="skills"
+                    placeholder="Escribe tus skills..."
+                    onChange={(e) => setText(e.target.value)}
+                    text={text}
+                    formRef={formRef}
+                    onKeyDown={handleKeyDown}
+                  />
+                  <SkillSuggestion filteredSkills={filteredSkills} />
+                </div>
+
+                <div className="flex max-h-[220px] flex-wrap gap-4 overflow-auto">
                   {skills.map((skill, index) => (
                     <Tag
                       tagColor={badgesColors[index % badgesColors.length]}
-                      key={skill + index}
+                      key={skill.id}
                       onRemove={handleRemoveSkill}
                     >
-                      {skill}
+                      {skill.name}
                     </Tag>
                   ))}
                 </div>
               </>
             ) : (
               <Input
-                value={text}
+                value={inputText}
                 className="h-16"
                 id={currentKey}
                 name={currentKey}
-                onChange={(e) => setText(e.target.value)}
+                onChange={(e) => setInputText(e.target.value)}
                 placeholder={currentField.placeholder}
               />
             )}

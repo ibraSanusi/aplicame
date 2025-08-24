@@ -3,6 +3,8 @@ export enum Role {
   User = "user",
 }
 
+export type SkillType = { id: string; name: string };
+
 export type MessageType = {
   role: Role;
   text: string;
@@ -37,7 +39,7 @@ export type UserInformationType = {
   email: string;
   mobile: number;
   position: string;
-  skills?: string[];
+  skills?: SkillType[];
 };
 
 export enum ApplicationState {
