@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Prisma dumps y DB locales
+prisma/*.sql
+prisma/*.db
+
+# Todos los .sql/.db locales (opcionales)
+*.sql
+*.db
+
