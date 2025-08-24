@@ -4,30 +4,26 @@ type TextAreaProps = {
   text: string;
   placeholder?: string;
   name: string;
-  formRef: RefObject<HTMLFormElement | null>;
+  formRef?: RefObject<HTMLFormElement | null>;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
 };
 
 export function TextArea({
   text,
   placeholder,
-  formRef,
   name,
   onChange,
+  onKeyDown,
 }: TextAreaProps) {
   return (
     <textarea
-      onKeyDown={(event) => {
-        if (event.key === "Enter" && !event.shiftKey) {
-          event.preventDefault();
-          formRef.current?.requestSubmit();
-        }
-      }}
+      onKeyDown={onKeyDown}
       value={text}
       name={name}
       onChange={onChange}
       placeholder={placeholder}
-      className="border-border placeholder:text-placeholder flex field-sizing-content max-h-[175px] min-h-20 w-full flex-grow items-start rounded-md border bg-white/70 p-3 backdrop-blur-lg outline-none placeholder:text-sm"
+      className="border-border placeholder:text-placeholder z-20 flex field-sizing-content max-h-[175px] min-h-20 w-full flex-grow items-start rounded-md border bg-white p-3 backdrop-blur-lg outline-none placeholder:text-sm"
     />
   );
 }

@@ -6,26 +6,36 @@ import {
 } from "@/lib/constants/userInformationFields";
 import { UserInformationType } from "@/lib";
 import { FormEvent, MouseEvent, useEffect, useState } from "react";
-import { useTextarea } from "@/hooks/useTextarea";
+import { useSkillTextarea } from "@/hooks/onboarding/useSkillTextarea";
+import { saveUserInformation } from "@/lib/user-information/services";
 
 export const useMultiStepForm = () => {
-  const { formRef, setText, text } = useTextarea();
+  const {
+    formRef,
+    setText,
+    hasMinimumSkills,
+    minimumSkills,
+    addNewSkill,
+    text,
+    filteredSkills,
+    handleKeyDown,
+    handleRemoveSkill,
+    skills,
+  } = useSkillTextarea();
   const [formData, setFormData] = useState<Partial<UserInformationType>>({});
 
   const [count, setCount] = useState<number>(0);
-  const [skills, setSkills] = useState<string[]>([]);
+
+  const [inputText, setInputText] = useState<string>("");
 
   const currentKey = fieldKeys[count];
   const currentField = userInformationFields[currentKey];
-
-  const minimumSkills = 5; // Minimo de skills que tiene que rellenar el usuario
-  const hasMinimumSkills = skills.length >= minimumSkills;
 
   const canFoward = count >= fieldKeys.length;
   const canPrevious = count <= 0;
 
   const isSkillField = currentKey === "skills";
-  const isInputTextEmpty = text !== "";
+  const isInputTextEmpty = inputText !== "";
 
   const progressValue = (100 / fieldKeys.length) * (count + 1);
 
@@ -45,48 +55,45 @@ export const useMultiStepForm = () => {
     if (!isSkillField) return;
 
     if (isSkillField && hasMinimumSkills) {
-      console.log("Hola mmg");
-      return submitUserInformation(e);
+      saveUserInformation(formData);
+      return;
     }
     return addNewSkill();
-  };
-
-  const submitUserInformation = (e: FormEvent) => {
-    return e;
-  };
-
-  const addNewSkill = () => {
-    if (text.trim()) {
-      setSkills((prev) => [...prev, text]);
-      setText("");
-    }
   };
 
   const handleForwardBotton = (e: MouseEvent) => {
     setFormData((prev) => ({
       ...prev,
-      [currentKey]: isSkillField ? skills : text,
+      [currentKey]: isSkillField ? skills : inputText,
     }));
 
     if (!isSkillField) {
       increase(e);
-      setText("");
+      setInputText("");
     }
   };
+
+  // Cuando se borre una skill por ejemplo o se añade una
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      [currentKey]: skills,
+    }));
+  }, [skills]);
 
   // Se clickó el botón de back o next
   useEffect(() => {
     // Si ya se relleno ese campo se mantiene el valor, sino se escribe uno nuevo
-    const inputText = isSkillField
+    const previousInputText = isSkillField
       ? skills
       : text.trim() !== ""
         ? text
         : formData?.[currentKey];
 
-    if (!isSkillField && inputText) {
-      setText(inputText.toString());
+    if (!isSkillField && previousInputText) {
+      setInputText(previousInputText.toString());
     } else {
-      setText("");
+      setInputText("");
     }
   }, [currentKey, count]);
 
@@ -96,20 +103,6 @@ export const useMultiStepForm = () => {
     if (!isSkillField) {
       setText("");
     }
-  };
-
-  const handleRemoveSkill = (e: MouseEvent<HTMLButtonElement>) => {
-    const skillToEliminate = e.currentTarget?.value;
-    const remainingSkills = skills.filter(
-      (skill) => skill !== skillToEliminate,
-    );
-
-    setSkills(remainingSkills);
-
-    setFormData((prev) => ({
-      ...prev,
-      [currentKey]: remainingSkills,
-    }));
   };
 
   return {
@@ -126,11 +119,15 @@ export const useMultiStepForm = () => {
     formRef,
     formData,
     minimumSkills,
+    filteredSkills,
+    inputText,
+    handleKeyDown,
     handleRemoveSkill,
     handleForwardBotton,
     handlePreviousBotton,
     handleSubmit,
     setText,
+    setInputText,
     decrease,
     increase,
   };
